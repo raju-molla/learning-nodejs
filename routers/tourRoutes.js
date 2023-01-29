@@ -10,7 +10,11 @@ const router = express.Router();
 //   next();
 // });
 
-router.route('/top-5-cheap').get(tourController.alisTour,tourController.getAllTour);
+router
+  .route('/top-5-cheap')
+  .get(tourController.alisTour, tourController.getAllTour);
+
+router.route('/tour-star').get(tourController.getTourStar);
 
 router
   .route('/')
