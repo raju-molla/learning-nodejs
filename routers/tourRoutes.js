@@ -15,6 +15,7 @@ router
   .get(tourController.alisTour, tourController.getAllTour);
 
 router.route('/tour-star').get(tourController.getTourStar);
+router.route('/monthly-plan/:year').get(tourController.getMonthPlan);
 
 router
   .route('/')
