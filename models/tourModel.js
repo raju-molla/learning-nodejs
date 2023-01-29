@@ -1,23 +1,24 @@
 const mongoose = require('mongoose');
 
-const tourSchema = new mongoose.Schema({
+const tourSchema = new mongoose.Schema(
+  {
     name: {
       type: String,
       required: [true, 'A tour must have name'],
       unique: true,
-      trim : true
+      trim: true,
     },
-    duration : {
+    duration: {
       type: Number,
-      required : [true,'A tour must have duation']
+      required: [true, 'A tour must have duation'],
     },
     maxGroupSize: {
-      type:Number,
-      required: [true, 'A tour must have max graoup']
+      type: Number,
+      required: [true, 'A tour must have max graoup'],
     },
     difficulty: {
       type: String,
-      required : [true, 'A tour must have difficulty']
+      required: [true, 'A tour must have difficulty'],
     },
 
     ratingsAverage: {
@@ -32,31 +33,35 @@ const tourSchema = new mongoose.Schema({
       type: Number,
       required: [true, 'A tour must have price'],
     },
-    priceDiscount : Number,
-    summary :{
-      type:String,
+    priceDiscount: Number,
+    summary: {
+      type: String,
       trim: true,
-      required : [true, 'A tour must have summary']
+      required: [true, 'A tour must have summary'],
     },
     description: {
-      type:String,
-      trim : true,
+      type: String,
+      trim: true,
     },
-    imageCover : {
-      type:String,
-      required : [true, 'A tour must have image cover']
+    imageCover: {
+      type: String,
+      required: [true, 'A tour must have image cover'],
     },
     images: [String],
-    createAt:{
-      type:Date,
-      default : Date.now(),
-      select : false
+    createAt: {
+      type: Date,
+      default: Date.now(),
+      select: false,
     },
-    startDates:[Date]
-
-
-
-
-  });
-  const Tour = mongoose.model('Tour', tourSchema);
-  module.exports = Tour
+    startDates: [Date],
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+tourSchema.virtual('durationWeeks').get(function () {
+  return this.duration / 7;
+});
+const Tour = mongoose.model('Tour', tourSchema);
+module.exports = Tour;
