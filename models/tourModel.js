@@ -8,6 +8,8 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have name'],
       unique: true,
       trim: true,
+      maxlength: [40, 'A tour name must have less then 40 character!'],
+      minlength: [10, 'A tour name must greater then 10 character!'],
     },
     slug: String,
     duration: {
@@ -21,6 +23,10 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, 'A tour must have difficulty'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: `difficulty will be : "easy", "medium", "difficult"`,
+      },
     },
 
     secrateTour: {
@@ -31,6 +37,8 @@ const tourSchema = new mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      max: [5.0, 'A tour rating Average must less then or egual 5.0 '],
+      min: [1.0, 'A tour rating Average must greater then or egual 1.0 '],
     },
     ratingsQuantity: {
       type: Number,
@@ -101,7 +109,7 @@ tourSchema.post(/^find/, function (docs, next) {
   next();
 });
 
-// AGREGATION MIDLLEWARE
+// AGGREGATION MIDLLEWARE
 
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secrateTour: { $ne: true } } });

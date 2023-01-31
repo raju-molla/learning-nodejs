@@ -46,7 +46,7 @@ exports.getTour = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      messeage: 'Invalid data sent',
+      messeage: err,
     });
   }
 };
@@ -84,7 +84,7 @@ exports.updateTour = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      messeage: 'Invalid data sent',
+      messeage: err,
     });
   }
 };
@@ -99,7 +99,7 @@ exports.deleteTour = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      messeage: 'Invalid data sent',
+      messeage: err,
     });
   }
 };
