@@ -23,6 +23,11 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have difficulty'],
     },
 
+    secrateTour: {
+      type: Boolean,
+      default: false,
+    },
+
     ratingsAverage: {
       type: Number,
       default: 4.5,
@@ -68,20 +73,40 @@ tourSchema.virtual('durationWeeks').get(function () {
 
 // DOUCMENTS MIDDLWARE SAVES BEFORE .save and .create or insertmany
 
-tourSchema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true });
+// tourSchema.pre('save', function (next) {
+//   this.slug = slugify(this.name, { lower: true });
+//   next();
+// });
+
+// tourSchema.pre('save', (next) => {
+//   console.log('will save documents');
+//   next();
+// });
+
+// tourSchema.post('save', (doc, next) => {
+//   console.log(doc);
+//   next();
+// });
+
+// QUERY MIDDLEWARE
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secrateTour: { $ne: true } });
+  this.start = Date.now();
   next();
 });
 
-tourSchema.pre('save', (next) => {
-  console.log('will save documents');
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`Query Time need - ${Date.now() - this.start} millisecond`);
+  console.log(docs);
   next();
 });
 
-tourSchema.post('save', (doc, next) => {
-  console.log(doc);
+// AGREGATION MIDLLEWARE
+
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secrateTour: { $ne: true } } });
+  console.log(this.pipeline());
   next();
 });
-
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;
