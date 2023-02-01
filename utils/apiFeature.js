@@ -1,4 +1,3 @@
-/* eslint-disable node/no-unsupported-features/es-syntax */
 class APIfeature {
   constructor(query, queryString) {
     this.query = query;
